@@ -1,6 +1,6 @@
 # Intro
 
-This project aims to create a chatbot respecting private data and that can be run locally. It's based on a deep learning NLP approach. 
+This project is a minimal rule-based chatbot in Python 
 
 # Installation
 
@@ -8,3 +8,4 @@ This project aims to create a chatbot respecting private data and that can be ru
 
 # Running
 
+`python main.py [--train] [--overwrite]`
