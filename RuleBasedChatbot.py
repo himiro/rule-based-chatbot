@@ -1,7 +1,9 @@
 import nltk
-from Chatbot import Chatbot
 import numpy as np
 import random
+from nltk.stem import WordNetLemmatizer
+import string
+from Model import Model
 
 
 class RuleBasedChatbot(Chatbot):
@@ -12,14 +14,39 @@ class RuleBasedChatbot(Chatbot):
         self.doc_y = []
         self.training = None
         self.intents = None
+        nltk.download('punkt')
+        nltk.download('wordnet')
+        self.words = []
+        self.lemmatizer = WordNetLemmatizer()
+        self.model = Model()
 
     def prepare_data(self, file_content):
         self.__parse_file(file_content)
-        Chatbot.prepare_data(self, file_content)
+        self.__lemmatize_data()
         # sort vocab and words
         self.words = sorted(set(self.words))
         self.classes = sorted(set(self.classes))
         self.training = Chatbot.one_hot_encoding(self)
+
+    # One-Hot Encoding
+    def one_hot_encoding(self):
+        training = []
+        out_empty = [0] * len(self.classes)
+        # create word ensemble
+        for idx, doc in enumerate(self.doc_X):
+            bow = []
+            text = self.lemmatizer.lemmatize(doc.lower())
+            for word in self.words:
+                bow.append(1) if word in text else bow.append(0)
+
+            output_row = list(out_empty)
+            output_row[self.classes.index(self.doc_y[idx])] = 1
+
+            training.append([bow, output_row])
+        # shuffle data and add it to training set
+        random.shuffle(training)
+        training = np.array(training, dtype=object)
+        return training
 
     def clean_text(self, text):
         tokens = nltk.word_tokenize(text)
@@ -66,3 +93,8 @@ class RuleBasedChatbot(Chatbot):
             # add tag to class if it doesn't already exist
             if intent["tag"] not in self.classes:
                 self.classes.append(intent["tag"])
+
+    def __lemmatize_data(self):
+        # Lemmatize lower vocab words
+        self.words = [self.lemmatizer.lemmatize(word.lower()) for word in self.words if
+                      word not in string.punctuation]
