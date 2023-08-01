@@ -2,10 +2,11 @@ import numpy as np
 from RuleBasedChatbot import RuleBasedChatbot
 import json
 import argparse
+from streamlit_app import run_streamlit_app
 
 parser = argparse.ArgumentParser(
-                    prog='Chatbot',
-                    description='Minimal rule-based chatbot')
+    prog='Chatbot',
+    description='Minimal rule-based chatbot')
 
 parser.add_argument('--train', action='store_true', help="Train a model from scratch")
 parser.add_argument('--overwrite', action='store_true', help="Overwrite existing ./model/model.keras model saving")
@@ -24,11 +25,6 @@ chatbot = RuleBasedChatbot()
 data = read_file('dataset.json')
 chatbot.prepare_data(data)
 
-print('Words :\n', chatbot.words)
-print('Classes :\n', chatbot.classes)
-print('Doc X :\n', chatbot.doc_X)
-print('Doc y :\n', chatbot.doc_y)
-
 train_X = np.array(list(chatbot.training[:, 0]))
 train_y = np.array(list(chatbot.training[:, 1]))
 
@@ -44,9 +40,4 @@ if TRAIN:
 else:
     chatbot.model.load_model()
 
-
-print('Chat loaded. Go !')
-while True:
-    message = input("")
-    result = chatbot.get_response(message, data)
-    print(result)
+run_streamlit_app(chatbot, data)

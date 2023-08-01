@@ -1,4 +1,6 @@
 convokit
 nltk
+streamlit
+streamlit_chat
 tensorflow
 tflearn

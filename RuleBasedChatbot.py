@@ -72,7 +72,7 @@ class RuleBasedChatbot():
             return_list.append(self.classes[r[0]])
         self.intents = return_list
 
-    def get_response(self, message, intents_json):
+    def generate_response(self, message, intents_json):
         self.pred_class(message)
         tag = self.intents[0]
         list_of_intents = intents_json["intents"]
