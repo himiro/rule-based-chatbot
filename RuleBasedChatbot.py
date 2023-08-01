@@ -6,9 +6,8 @@ import string
 from Model import Model
 
 
-class RuleBasedChatbot(Chatbot):
+class RuleBasedChatbot():
     def __init__(self):
-        Chatbot.__init__(self)
         self.classes = []
         self.doc_X = []
         self.doc_y = []
@@ -26,7 +25,7 @@ class RuleBasedChatbot(Chatbot):
         # sort vocab and words
         self.words = sorted(set(self.words))
         self.classes = sorted(set(self.classes))
-        self.training = Chatbot.one_hot_encoding(self)
+        self.training = self.one_hot_encoding()
 
     # One-Hot Encoding
     def one_hot_encoding(self):

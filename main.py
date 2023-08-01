@@ -13,6 +13,7 @@ args = parser.parse_args()
 TRAIN = args.train
 OVERWRITE = args.overwrite
 
+
 def read_file(filename):
     with open(filename) as intents:
         return json.load(intents)
